@@ -11,6 +11,7 @@
       <div>Тип записи</div>
       <div>Логин</div>
       <div>Пароль</div>
+      <div>Действие</div>
     </div>
     <q-button label="asd" />
     
@@ -26,11 +27,15 @@
         />
         <q-select
           v-model="account.type"
+          :options="typePasswordOptions"
+          emit-value
+          map-options
           label="Тип"
         />
         <q-input
           v-model="account.login"
           label="Логин"
+          :style="account.type === 'ldap' ? 'width: 40%' : 'width: 20%'"
         />
         <q-input
           v-if="account.type === 'local'"
@@ -46,6 +51,10 @@
             />
           </template>
         </q-input>
+        <q-btn
+          icon="remove"
+          flat
+        />
       </div>
     </div>
   </div>
@@ -61,6 +70,11 @@ type Account = {
   isPassword?: boolean
 }
 
+const typePasswordOptions = [
+  { value: 'local', label: 'Локальная' },
+  { value: 'ldap', label: 'LDAP' }
+]
+
 const accounts = reactive<Account[]>([])
 
 accounts.push({
@@ -74,13 +88,13 @@ accounts.push({
 
 <style scoped lang="scss">
 .accounts {
-
+  min-width: 1000px;
   &-header-table {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     div {
-      width: 25%;
+      width: 20%;
       padding: 0 10px;
     }
   }
@@ -91,7 +105,7 @@ accounts.push({
     }
 
     &-item > :nth-child(n) {
-      width: 25%;
+      width: 20%;
       padding: 0 10px;
     }
   }
