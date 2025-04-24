@@ -24,6 +24,7 @@
         <q-input
           v-model="account.mark"
           label="Метка"
+          :rules="[ val => val.length <= 50 || 'Максимум 50 символов']"
         />
         <q-select
           v-model="account.type"
@@ -35,12 +36,18 @@
         <q-input
           v-model="account.login"
           label="Логин"
+          :rules="[
+            val => (!!val && val.length <= 100) || 'Максимум 100 символов'
+          ]"
           :style="account.type === 'ldap' ? 'width: 40%' : 'width: 20%'"
         />
         <q-input
           v-if="account.type === 'local'"
           v-model="account.password"
           label="Пароль"
+          :rules="[
+            val => ((!!val && val.length <= 100) || account.type === 'ldap') || 'Максимум 100 символов'
+          ]"
           :type="account.isPassword ? 'password' : 'text'"
         >
           <template v-slot:append>
@@ -54,6 +61,7 @@
         <q-btn
           icon="remove"
           flat
+          @click="removeAccount(idx)"
         />
       </div>
     </div>
