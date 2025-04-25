@@ -1,8 +1,15 @@
 <template>
   <div class="accounts">
-    <h5>Учетные записи</h5>
+    <div class="title">
+      <h5>Учетные записи</h5>
+      <q-btn
+        icon="add"
+        color="primary"
+        @click="addAccount"
+      />
+    </div>
 
-    <div>
+    <div class="description">
       Для указания нескольких меток для одной пары логин/пароль используйте разделитель ;
     </div>
 
@@ -15,7 +22,10 @@
     </div>
     <q-button label="asd" />
     
-    <div class="accounts-table">
+    <q-form
+      class="accounts-table"
+      @submit="saveAccounts"
+    >
       <div
         v-for="(account, idx) in accounts"
         :key="idx"
@@ -64,50 +74,66 @@
           @click="removeAccount(idx)"
         />
       </div>
-    </div>
+      <q-btn
+        color="primary"
+        type="submit"
+        style="margin-top: 20px;"
+      >
+        Сохранить
+      </q-btn>
+    </q-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-type Account = {
-  mark: string,
-  type: 'ldap' | 'local',
-  login: string,
-  password?: string
-  isPassword?: boolean
-}
+import { useAccountsStore } from 'src/stores/accounts-store'
+import { onMounted } from 'vue'
 
 const typePasswordOptions = [
   { value: 'local', label: 'Локальная' },
   { value: 'ldap', label: 'LDAP' }
 ]
 
-const accounts = reactive<Account[]>([])
+const { accounts, removeAccount, addAccount, saveAccounts, loadAccounts } = useAccountsStore()
 
-accounts.push({
-  mark: '',
-  type: 'local',
-  login: '',
-  password: '',
-  isPassword: true
+onMounted(() => {
+  loadAccounts()
 })
 </script>
 
 <style scoped lang="scss">
 .accounts {
   min-width: 1000px;
+
+  .title {
+    display: flex;
+    gap: 20px;
+
+    h5 {
+      margin: 0;
+    }
+  }
+
+  .description {
+    margin-top: 20px;
+  }
+
   &-header-table {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 40px;
     div {
       width: 20%;
       padding: 0 10px;
     }
+
+    :last-child {
+      text-align: end;
+    }
   }
 
   &-table {
+    margin-top: 5px;
     &-item {
       display: flex;
     }
