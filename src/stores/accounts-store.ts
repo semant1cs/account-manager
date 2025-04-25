@@ -46,6 +46,8 @@ export const useAccountsStore = defineStore('accounts', () => {
 
       parsedAccounts?.forEach((account: Account) => {
         const preparedMark = (account.mark as unknown as string[]).join(';')
+        // К такому случаю стоило бы добавить больше типизации, но не совсем понял этот момент
+        // Больше о нём написал в AccountsManager.vue
         accounts.push({ ...account, mark: preparedMark })
       });
     }
