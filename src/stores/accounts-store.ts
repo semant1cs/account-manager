@@ -27,7 +27,6 @@ export const useAccountsStore = defineStore('accounts', () => {
   }
 
   const saveAccounts = () => {
-    console.log(accounts)
     const preparedAccounts = accounts.map((account) => {
       const preparedMark = account.mark.split(';')
       if (account.type === 'local') {

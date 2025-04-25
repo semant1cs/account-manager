@@ -89,6 +89,15 @@
 import { useAccountsStore } from 'src/stores/accounts-store'
 import { nextTick, onMounted } from 'vue'
 
+// Не совсем понял, эту строчку:
+// Все поля сохраняются в текстовом виде, кроме поле Метка. Оно должно преобразовываться в массив,
+// где один элемент это строковое значение до ;. В массиве должен лежать объект, где поле text
+// равно одному элементу метки - ({ text: элемент метки })
+
+// Есть идея, что должно быть реализовано как у меня, только при сохранении в localStorage
+// записывается не в виде массива ['example1', 'example2'], а вот в таком формате:
+// [ { text: 'example1' }, { text: 'example2' } ]
+
 const typePasswordOptions = [
   { value: 'local', label: 'Локальная' },
   { value: 'ldap', label: 'LDAP' }
