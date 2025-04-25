@@ -1,4 +1,4 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
+import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 
 type Account = {
@@ -27,16 +27,30 @@ export const useAccountsStore = defineStore('accounts', () => {
   }
 
   const saveAccounts = () => {
-    localStorage.setItem('accounts', JSON.stringify(accounts))
+    console.log(accounts)
+    const preparedAccounts = accounts.map((account) => {
+      const preparedMark = account.mark.split(';')
+      if (account.type === 'local') {
+        return { ...account, mark: preparedMark }
+      } else {
+        return { ...account, password: null, mark: preparedMark }
+      }
+    })
+    localStorage.setItem('accounts', JSON.stringify(preparedAccounts))
   }
 
   const loadAccounts = () => {
-    // accounts = JSON.parse(localStorage.getItem('accounts') ?? [])
+    const storageAccounts = localStorage.getItem('accounts')
+
+    if (storageAccounts) {
+      const parsedAccounts = JSON.parse(storageAccounts)
+
+      parsedAccounts?.forEach((account: Account) => {
+        const preparedMark = (account.mark as unknown as string[]).join(';')
+        accounts.push({ ...account, mark: preparedMark })
+      });
+    }
   }
 
   return { accounts, addAccount, saveAccounts, removeAccount, loadAccounts }
 })
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAccountsStore, import.meta.hot));
-}

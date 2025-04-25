@@ -87,7 +87,7 @@
 
 <script setup lang="ts">
 import { useAccountsStore } from 'src/stores/accounts-store'
-import { onMounted } from 'vue'
+import { nextTick, onMounted } from 'vue'
 
 const typePasswordOptions = [
   { value: 'local', label: 'Локальная' },
@@ -96,8 +96,9 @@ const typePasswordOptions = [
 
 const { accounts, removeAccount, addAccount, saveAccounts, loadAccounts } = useAccountsStore()
 
-onMounted(() => {
+onMounted(async () => {
   loadAccounts()
+  await nextTick()
 })
 </script>
 
